@@ -141,7 +141,7 @@ const AdBlockDetector = () => {
             <div className="space-y-6">
               <p className="text-lg text-gray-700 leading-relaxed">
                 Para desativar o AdBlock, clique no ícone do AdBlock na barra de
-                extensões e selecione "Pausar neste site". É rápido e fácil!
+                extensões e selecione Pausar neste site. É rápido e fácil!
               </p>
               <button className="w-full bg-indigo-600 text-white py-4 px-6 rounded-xl text-lg font-semibold hover:bg-indigo-700 transition-colors duration-300 flex items-center justify-center gap-3 shadow-md hover:shadow-lg">
                 <ExternalLink className="w-6 h-6" />
