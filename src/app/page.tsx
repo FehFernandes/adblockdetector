@@ -1,101 +1,184 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useState, useEffect } from 'react';
+import { useDetectAdBlock } from "adblock-detect-react";
+import { Shield, ShieldAlert, X, ExternalLink, CheckCircle, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const AdBlockDetector = () => {
+  const adBlockDetected = useDetectAdBlock();
+  const [showPopup, setShowPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      if (adBlockDetected) {
+        setShowPopup(true);
+      }
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [adBlockDetected]);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-blue-100 to-indigo-100 p-8 font-sans">
+      <main className="max-w-4xl mx-auto">
+        {/* Header Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
+        >
+          <div className="flex justify-center mb-6">
+            <Shield className="w-20 h-20 text-indigo-600" />
+          </div>
+          <h1 className="text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
+            Proteção de Conteúdo
+          </h1>
+          <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
+            Nosso conteúdo é mantido através de anúncios responsáveis. 
+            Por favor, considere nos apoiar desativando seu bloqueador.
+          </p>
+        </motion.div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        {/* Status Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mb-16"
+        >
+          <div className={`bg-white border-2 ${adBlockDetected ? 'border-red-400' : 'border-green-400'} rounded-xl p-6 shadow-lg transition-all duration-300 ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
+            <div className="flex items-center gap-6">
+              {adBlockDetected ? (
+                <AlertCircle className="h-12 w-12 text-red-500" />
+              ) : (
+                <CheckCircle className="h-12 w-12 text-green-500" />
+              )}
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  {isLoading ? (
+                    "Verificando status..."
+                  ) : adBlockDetected ? (
+                    "AdBlock Detectado"
+                  ) : (
+                    "Tudo certo!"
+                  )}
+                </h3>
+                <p className="text-lg text-gray-700">
+                  {isLoading ? (
+                    "Por favor, aguarde enquanto verificamos seu navegador..."
+                  ) : adBlockDetected ? (
+                    "Detectamos que você está usando um bloqueador de anúncios"
+                  ) : (
+                    "Obrigado por apoiar nosso conteúdo!"
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Content Section */}
+        <div className="grid md:grid-cols-2 gap-8">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="bg-white rounded-xl p-8 shadow-xl"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <h2 className="text-2xl font-bold mb-6 text-indigo-700">Por que desativar o AdBlock?</h2>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <div className="mt-1 w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                  <div className="w-3 h-3 rounded-full bg-indigo-600"></div>
+                </div>
+                <span className="text-lg text-gray-700">Ajuda a manter nosso conteúdo gratuito</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="mt-1 w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                  <div className="w-3 h-3 rounded-full bg-indigo-600"></div>
+                </div>
+                <span className="text-lg text-gray-700">Permite que continuemos produzindo conteúdo de qualidade</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="mt-1 w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                  <div className="w-3 h-3 rounded-full bg-indigo-600"></div>
+                </div>
+                <span className="text-lg text-gray-700">Garante o funcionamento adequado do site</span>
+              </li>
+            </ul>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="bg-white rounded-xl p-8 shadow-xl"
           >
-            Read our docs
-          </a>
+            <h2 className="text-2xl font-bold mb-6 text-indigo-700">Como desativar</h2>
+            <div className="space-y-6">
+              <p className="text-lg text-gray-700 leading-relaxed">
+                Para desativar o AdBlock, clique no ícone do AdBlock na barra de extensões
+                e selecione "Pausar neste site". É rápido e fácil!
+              </p>
+              <button className="w-full bg-indigo-600 text-white py-4 px-6 rounded-xl text-lg font-semibold hover:bg-indigo-700 transition-colors duration-300 flex items-center justify-center gap-3 shadow-md hover:shadow-lg">
+                <ExternalLink className="w-6 h-6" />
+                Tutorial em vídeo
+              </button>
+            </div>
+          </motion.div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {showPopup && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"
+            >
+              <button 
+                onClick={() => setShowPopup(false)}
+                className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              
+              <div className="text-center">
+                <div className="flex justify-center mb-6">
+                  <ShieldAlert className="w-16 h-16 text-red-500" />
+                </div>
+                <h2 className="text-3xl font-bold mb-4 text-gray-900">AdBlock Detectado</h2>
+                <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+                  Para continuar navegando em nosso site, por favor desative seu bloqueador
+                  de anúncios. Nós utilizamos anúncios não intrusivos para manter nosso
+                  conteúdo gratuito e de qualidade.
+                </p>
+                <button
+                  onClick={() => setShowPopup(false)}
+                  className="w-full bg-indigo-600 text-white py-4 px-6 rounded-xl text-lg font-semibold hover:bg-indigo-700 transition-colors duration-300 shadow-md hover:shadow-lg"
+                >
+                  Entendi, vou desativar
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
-}
+};
+
+export default AdBlockDetector;
+
