@@ -161,7 +161,7 @@ const AdBlockDetector = () => {
                 </div>
                 <h2 className="text-3xl font-bold mb-4 text-gray-900">AdBlock Detectado</h2>
                 <p className="text-lg text-gray-700 mb-8 leading-relaxed">
-                  Para continuar navegando em nosso site, por favor desative seu bloqueador
+                Para continuar navegando em nosso site, por favor desative seu bloqueador
                   de anúncios. Nós utilizamos anúncios não intrusivos para manter nosso
                   conteúdo gratuito e de qualidade.
                 </p>
