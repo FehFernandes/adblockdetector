@@ -55,6 +55,7 @@ Você pode começar a editar o projeto modificando o arquivo `src/app/page.tsx`.
 Este projeto utiliza:
 - **[Next.js](https://nextjs.org/)** para renderização e desenvolvimento de páginas rápidas e modernas.
 - **[Tailwind CSS](https://tailwindcss.com/)** para estilização.
+- **[Adblockdetector](https://www.npmjs.com/package/adblock-detect-react?activeTab=readme)**
 
 ## 📚 Saiba Mais
 
